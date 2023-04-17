@@ -1,10 +1,11 @@
 import React from "react";
-import {Text} from "react-native";
+import {Text, View} from "react-native";
+import styles from "./styles";
 
 export class Clock extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { date: new Date() };
+        this.state = {date: new Date()};
     }
 
     componentDidMount() {
@@ -22,8 +23,20 @@ export class Clock extends React.Component {
     }
 
     render() {
+        const curDate = this.state.date
         return (
-            <Text>{this.state.date.toLocaleTimeString("en-US", {timeZone: this.props.timeZone})}</Text>
+            <View style={styles.timeColum}>
+                <Text>{curDate.toLocaleTimeString(
+                    "en-us",
+                    {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour12: false,
+                        timeZone: this.props.timeZone})}
+                </Text>
+            </View>
         );
     }
 }

@@ -7,12 +7,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    testRow: {
+    infoRow: {
+        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'stretch',
         justifyContent: 'space-between',
         margin: 8,
+    },
+    infoRowName: {
+        flex: 1,
+    },
+    infoRowButton: {
+        flex: 1,
+    },
+    infoRowTime: {
+        flex: 2,
+    },
+    timeColum: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        justifyContent: 'space-between',
     },
 });
 

@@ -46,10 +46,16 @@ const FollowPage = (
     const showZones = () => {
         return zones.map((zone: any, index: number) => {
             return (
-                <View key={index} style={styles.testRow}>
-                    <Text>{zone.name}</Text>
-                    <Clock timeZone={zone.name}/>
-                    <Button title='Delete' onPress={() => deleteZone(zone.id)}/>
+                <View key={index} style={styles.infoRow}>
+                    <View style={styles.infoRowName}>
+                        <Text>{zone.name}</Text>
+                    </View>
+                    <View style={styles.infoRowTime}>
+                        <Clock style={styles.infoRowTime} timeZone={zone.name}/>
+                    </View>
+                    <View style={styles.infoRowButton}>
+                        <Button title='Delete' onPress={() => deleteZone(zone.id)}/>
+                    </View>
                 </View>
             );
         });
@@ -69,6 +75,11 @@ const FollowPage = (
             );
         });
     }
+
+    const searchLine = () => {
+
+    }
+
     return (
         <View style={styles.container}>
             {showZones()}
