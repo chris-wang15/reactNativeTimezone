@@ -1,8 +1,9 @@
 import * as SQLite from 'expo-sqlite';
 import {FlatList, Switch, Text, View} from "react-native";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import styles from "./styles";
 import zonesList from "./zonesList";
+import {useFocusEffect} from "@react-navigation/native";
 
 const ListPage = (
     props: { db: SQLite.WebSQLDatabase; }
@@ -41,25 +42,26 @@ const ZoneItem = (
     const [followed, setFollowed]
         = useState(false);
 
-    useEffect(() => {
-            db.transaction(tx => {
-                tx.executeSql('SELECT * FROM zones where id = ?', [index],
-                    (txObj, resultSet) => {
-                        console.log(index + " / " + name + ": " + resultSet.rows.length);
-                        setFollowed(resultSet.rows.length > 0);
-                    },
-                    (txObj, error) => {
-                        console.log(error);
-                        return true;
-                    }
-                );
-            });
-        }, []
-    );
+    useFocusEffect(
+        useCallback(() => {
+                db.transaction(tx => {
+                    tx.executeSql('SELECT * FROM zones where id = ?', [index],
+                        (txObj, resultSet) => {
+                            console.log(index + " / " + name + ": " + resultSet.rows.length);
+                            setFollowed(resultSet.rows.length > 0);
+                        },
+                        (txObj, error) => {
+                            console.log(error);
+                            return true;
+                        }
+                    );
+                });
+            }, []
+        ));
 
     const unFollowZone = () => {
         db.transaction(tx => {
-            tx.executeSql('DELETE FROM names where id = ?', [index],
+            tx.executeSql('DELETE FROM zones where id = ?', [index],
                 (txObj, resultSet) => {
                     setFollowed(false);
                 },
@@ -73,8 +75,9 @@ const ZoneItem = (
 
     const followZone = () => {
         db.transaction(tx => {
-            tx.executeSql('INSERT IGNORE INTO zones (id, name) values (?, ?)', [index, name],
+            tx.executeSql('INSERT OR IGNORE INTO zones(id, name) VALUES(?, ?)', [index, name],
                 (txObj, resultSet) => {
+                    console.log('follow success');
                     setFollowed(true);
                 },
                 (txObj, error) => {
@@ -87,20 +90,20 @@ const ZoneItem = (
 
     return (
         <View key={index} style={styles.zoneRow}>
-            <View style={styles.titleContainer} >
+            <View style={styles.titleContainer}>
                 <Text style={styles.title}>{name}</Text>
             </View>
-            <View style={styles.switchContainer} >
+            <View style={styles.switchContainer}>
                 <Switch
                     style={styles.switch}
                     value={followed}
                     disabled={false}
                     onValueChange={(value) => {
                         if (value) {
-                            console.log("follow " + index + " / " + name);
+                            console.log("follow " + index + " & " + name);
                             followZone()
                         } else {
-                            console.log("unFollow " + index + " / " + name);
+                            console.log("unFollow " + index + " & " + name);
                             unFollowZone()
                         }
                     }}

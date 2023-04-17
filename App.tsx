@@ -11,10 +11,20 @@ export default function App() {
 
     useEffect(() => {
         db.transaction(tx => {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS zones (id INTEGER, name TEXT, PRIMARY KEY(id))')
+            console.log("create begin")
+            tx.executeSql('CREATE TABLE IF NOT EXISTS zones (id INTEGER, name TEXT, PRIMARY KEY(id))',
+                [],
+                (txObj, resultSet) => {
+                    console.log("create sucess")
+                    setLoading(false)
+                },
+                (txObj, error): boolean => {
+                    console.log("create failed: " + error);
+                    return true;
+                }
+            );
         });
-        setLoading(false)
-    }, []);
+    });
 
     if (isLoading) {
         return (
@@ -30,7 +40,7 @@ export default function App() {
     // </View>
     return (
         <NavigationContainer>
-            <MyTabs db={db} ></MyTabs>
+            <MyTabs db={db}></MyTabs>
         </NavigationContainer>
     );
 }

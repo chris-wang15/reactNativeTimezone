@@ -1,8 +1,10 @@
 import * as SQLite from 'expo-sqlite';
 import {Button, Text, View} from "react-native";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import styles from "./styles";
 import {StatusBar} from "expo-status-bar";
+import { useFocusEffect } from "@react-navigation/native";
+import Clock from 'react-live-clock';
 
 const FollowPage = (
     props: { db: SQLite.WebSQLDatabase; }
@@ -13,22 +15,26 @@ const FollowPage = (
     const [zones, setZones]
         = useState([] as any[]);
 
-    useEffect(() => {
+    useFocusEffect(
+        useCallback(
+
+        () => {
         db.transaction(tx => {
-            // @ts-ignore
-            tx.executeSql('SELECT * FROM zones', null,
+            console.log("follow sql start");
+            tx.executeSql('SELECT * FROM zones', [],
                 (txObj, resultSet) => {
+                    console.log("sql result: " + resultSet.rows._array.length);
                     setZones(resultSet.rows._array);
                 },
                 (txObj, error) => {
-                    console.log(error);
+                    console.warn(error);
                     return true;
                 }
             );
         });
 
         setLoading(false)
-    }, []);
+    }, []));
 
     if (isLoading) {
         return (
@@ -39,7 +45,10 @@ const FollowPage = (
     }
 
     const showZones = () => {
+        // <Clock format={'HH:mm:ss'} ticking={true} timezone={zone.name} />
         return zones.map((zone: any, index: number) => {
+            const timeZone = zone.name
+                // <Clock format={'HH:mm:ss'} ticking={true} timezone={timeZone} />
             return (
                 <View key={index} style={styles.testRow}>
                     <Text>{zone.name}</Text>
@@ -51,7 +60,7 @@ const FollowPage = (
 
     const deleteZone = (id: number) => {
         db.transaction(tx => {
-            tx.executeSql('DELETE FROM names where id = ?', [id],
+            tx.executeSql('DELETE FROM zones where id = ?', [id],
                 (txObj, resultSet) => {
                     let existingNames: any[] = [...zones].filter(zone => zone.id !== id);
                     setZones(existingNames);
@@ -63,7 +72,6 @@ const FollowPage = (
             );
         });
     }
-
     return (
         <View style={styles.container}>
             {showZones()}
