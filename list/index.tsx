@@ -8,8 +8,9 @@ const ListPage = (
     props: { db: SQLite.WebSQLDatabase; }
 ) => {
     const db: SQLite.WebSQLDatabase = props.db
+
     return (
-        <View style={styles.container}>
+        <View style={styles.listContainer}>
             <FlatList
                 data={zonesList}
                 renderItem={({item}) =>
@@ -84,23 +85,28 @@ const ZoneItem = (
         });
     }
 
+    // <Switch
+    //     style={styles.switch}
+    //     value={followed}
+    //     disabled={false}
+    //     onValueChange={(value) => {
+    //         if (value) {
+    //             console.log("follow " + index + " / " + name);
+    //             followZone()
+    //         } else {
+    //             console.log("unFollow " + index + " / " + name);
+    //             unFollowZone()
+    //         }
+    //     }}
+    // />
     return (
         <View key={index} style={styles.zoneRow}>
-            <Text style={styles.title}>{name}</Text>
-            <Switch
-                style={styles.switch}
-                value={followed}
-                disabled={false}
-                onValueChange={(value) => {
-                    if (value) {
-                        console.log("follow " + index + " / " + name);
-                        followZone()
-                    } else {
-                        console.log("unFollow " + index + " / " + name);
-                        unFollowZone()
-                    }
-                }}
-            />
+            <View style={styles.titleContainer} >
+                <Text style={styles.title}>{name}</Text>
+            </View>
+            <View style={styles.switchContainer} >
+                <Text style={styles.title}>{name}</Text>
+            </View>
         </View>
     )
 }

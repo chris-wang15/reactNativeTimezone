@@ -1,22 +1,25 @@
 import {StyleSheet} from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+    listContainer: {
+        width: '100%',
     },
     zoneRow: {
+        width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        alignSelf: 'stretch',
         justifyContent: 'space-between',
         margin: 8,
     },
+    titleContainer: {
+        flex: 3,
+    },
     title: {
-        fontSize: 40,
+        fontSize: 16,
         fontWeight: 'bold',
+    },
+    switchContainer: {
+        flex: 1,
     },
     switch: {
         backgroundColor: 'white',

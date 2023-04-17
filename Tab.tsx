@@ -2,21 +2,21 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FollowPage from "./follow";
 import ListPage from "./list";
 import * as SQLite from "expo-sqlite";
-import {View} from "react-native";
+import {StyleSheet, View} from "react-native";
 
 const Tab = createBottomTabNavigator()
 
 const MyTabs = (props: { db: SQLite.WebSQLDatabase; }) => {
     const FollowScreen = () => {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.screenContainer}>
                 {FollowPage(props)}
             </View>
         );
     }
     const ListScreen = () => {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.screenContainer}>
                 {ListPage(props)}
             </View>
         );
@@ -30,3 +30,10 @@ const MyTabs = (props: { db: SQLite.WebSQLDatabase; }) => {
 }
 
 export default MyTabs
+
+const styles = StyleSheet.create({
+    screenContainer: {
+        width: '100%',
+        height: '100%',
+    },
+});
