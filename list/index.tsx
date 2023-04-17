@@ -85,27 +85,26 @@ const ZoneItem = (
         });
     }
 
-    // <Switch
-    //     style={styles.switch}
-    //     value={followed}
-    //     disabled={false}
-    //     onValueChange={(value) => {
-    //         if (value) {
-    //             console.log("follow " + index + " / " + name);
-    //             followZone()
-    //         } else {
-    //             console.log("unFollow " + index + " / " + name);
-    //             unFollowZone()
-    //         }
-    //     }}
-    // />
     return (
         <View key={index} style={styles.zoneRow}>
             <View style={styles.titleContainer} >
                 <Text style={styles.title}>{name}</Text>
             </View>
             <View style={styles.switchContainer} >
-                <Text style={styles.title}>{name}</Text>
+                <Switch
+                    style={styles.switch}
+                    value={followed}
+                    disabled={false}
+                    onValueChange={(value) => {
+                        if (value) {
+                            console.log("follow " + index + " / " + name);
+                            followZone()
+                        } else {
+                            console.log("unFollow " + index + " / " + name);
+                            unFollowZone()
+                        }
+                    }}
+                />
             </View>
         </View>
     )

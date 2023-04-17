@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     zoneRow: {
-        width: '100%',
+        width: '95%',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     switch: {
-        backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
     },
