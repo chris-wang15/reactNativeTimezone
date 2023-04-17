@@ -1,10 +1,10 @@
 import * as SQLite from 'expo-sqlite';
 import {Button, Text, View} from "react-native";
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import styles from "./styles";
 import {StatusBar} from "expo-status-bar";
-import { useFocusEffect } from "@react-navigation/native";
-import Clock from 'react-live-clock';
+import {useFocusEffect} from "@react-navigation/native";
+import {Clock} from "./Clock";
 
 const FollowPage = (
     props: { db: SQLite.WebSQLDatabase; }
@@ -17,24 +17,23 @@ const FollowPage = (
 
     useFocusEffect(
         useCallback(
+            () => {
+                db.transaction(tx => {
+                    console.log("follow sql start");
+                    tx.executeSql('SELECT * FROM zones', [],
+                        (txObj, resultSet) => {
+                            console.log("sql result: " + resultSet.rows._array.length);
+                            setZones(resultSet.rows._array);
+                        },
+                        (txObj, error) => {
+                            console.warn(error);
+                            return true;
+                        }
+                    );
+                });
 
-        () => {
-        db.transaction(tx => {
-            console.log("follow sql start");
-            tx.executeSql('SELECT * FROM zones', [],
-                (txObj, resultSet) => {
-                    console.log("sql result: " + resultSet.rows._array.length);
-                    setZones(resultSet.rows._array);
-                },
-                (txObj, error) => {
-                    console.warn(error);
-                    return true;
-                }
-            );
-        });
-
-        setLoading(false)
-    }, []));
+                setLoading(false)
+            }, []));
 
     if (isLoading) {
         return (
@@ -45,13 +44,11 @@ const FollowPage = (
     }
 
     const showZones = () => {
-        // <Clock format={'HH:mm:ss'} ticking={true} timezone={zone.name} />
         return zones.map((zone: any, index: number) => {
-            const timeZone = zone.name
-                // <Clock format={'HH:mm:ss'} ticking={true} timezone={timeZone} />
             return (
                 <View key={index} style={styles.testRow}>
                     <Text>{zone.name}</Text>
+                    <Clock timeZone={zone.name}/>
                     <Button title='Delete' onPress={() => deleteZone(zone.id)}/>
                 </View>
             );
